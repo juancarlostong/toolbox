@@ -1,0 +1,22 @@
+#!/usr/bin/env bash
+
+# gets ip address of current devops-jenkins-master
+
+if [ $# -eq 0 ]; then
+  echo "must provide instance tag name"
+  exit 1
+fi
+
+NAME=$1
+aws-okta exec devops -- aws ec2 describe-instances --region us-west-2 --filters '
+[
+  {
+    "Name": "tag:Name",
+    "Values": ["'$NAME'"]
+  },
+  {
+    "Name": "instance-state-name",
+    "Values": ["running"] 
+  }
+]
+' --query 'Reservations[].Instances[].[ PrivateIpAddress ]' --output text

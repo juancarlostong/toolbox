@@ -1,0 +1,3 @@
+#!/usr/bin/env bash
+
+curl -s https://registry.hub.docker.com/v1/repositories/jenkins/jenkins/tags | jq -r '.[].name' | docker run -i debian:stable-slim sort -Vr | awk '$1 ~ /^[[:digit:]]+.*-slim/' | head -10
